@@ -56,6 +56,7 @@ export const getBeritaById = async (req, res) => {
 export const createBerita = async (req, res) => {
   const { judul, deskripsi } = req.body;
   const files = req.files.map((file) => file.filename);
+  if (!req.userId) return Response(401, "Harap login dahulu", res);
   try {
     await Berita.create({
       judul: judul,

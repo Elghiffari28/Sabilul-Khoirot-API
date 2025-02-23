@@ -4,6 +4,7 @@ import User from "../models/User.js";
 import argon2 from "argon2";
 import db from "../config/Database.js";
 import { DATAResponse, GETResponse, Response } from "../response.js";
+import { DeleteImage } from "../config/UploadImage.js";
 
 export const getGuru = async (req, res) => {
   try {
@@ -97,7 +98,6 @@ export const updateGuru = async (req, res) => {
     },
   });
   if (!guru) return Response(404, "Guru tidak ditemukan", res);
-  // console.log(guru.id);
   const {
     name,
     nrg,
@@ -112,7 +112,13 @@ export const updateGuru = async (req, res) => {
     nohp,
     tahun_masuk,
   } = req.body;
-  const file = req.file?.filename;
+  let file;
+  if (!req.file) {
+    file = guru.foto;
+  } else {
+    DeleteImage(guru.foto);
+    file = req.file.filename;
+  }
   console.log(file);
   console.log(nik.length);
   // console.log("Data to Update:", {
@@ -172,11 +178,14 @@ export const deleteGuru = async (req, res) => {
   });
   if (!guru) return Response(404, "Guru tidak ditemukan", res);
   try {
-    await Guru.destroy({
+    const result = await Guru.destroy({
       where: {
         id: guru.id,
       },
     });
+    if (result) {
+      DeleteImage(guru.foto);
+    }
     await User.destroy({
       where: {
         id: guru.userId,
