@@ -20,7 +20,7 @@ export const getKaryaById = async (req, res) => {
         {
           model: Komentar,
           as: "komentar",
-          attributes: ["isi", "createdAt", "name"],
+          attributes: ["id", "isi", "createdAt", "name"],
         },
       ],
       where: {

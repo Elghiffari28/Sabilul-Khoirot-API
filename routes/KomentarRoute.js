@@ -9,10 +9,10 @@ import multer from "multer";
 const upload = multer();
 const router = express.Router();
 
-router.get("/Komentar", getKomentar);
+router.get("/komentar", getKomentar);
 // router.get("/Komentar/:id", verifyUser, getKomentarById);
-router.post("/Komentar/:karyaId", upload.none(), verifyUser, createKomentar);
+router.post("/komentar/:karyaId", upload.none(), verifyUser, createKomentar);
 // router.patch("/Komentar/:id", verifyUser, updateKomentar);
-router.delete("/Komentar/:id", verifyUser, adminOnly, deleteKomentar);
+router.delete("/komentar/:id", verifyUser, deleteKomentar);
 
 export default router;

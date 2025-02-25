@@ -2,6 +2,7 @@ import Berita from "../models/Berita.js";
 import { GETResponse, Response } from "../response.js";
 import User from "../models/User.js";
 import { DeleteImage } from "../config/UploadImage.js";
+import { Op } from "sequelize";
 
 export const getBerita = async (req, res) => {
   try {
@@ -13,6 +14,40 @@ export const getBerita = async (req, res) => {
           attributes: ["name", "email", "role"],
         },
       ],
+    });
+    const beritaData = response.map((berita) => {
+      let parsedFile = berita.toJSON(); // Konversi instance Sequelize ke objek JS
+      if (parsedFile.file) {
+        try {
+          parsedFile.file = JSON.parse(parsedFile.file); // Parse JSON jika valid
+        } catch (error) {
+          console.error("Error parsing JSON:", error.message);
+        }
+      }
+      return parsedFile; // Pastikan untuk mengembalikan data
+    });
+    GETResponse(200, beritaData, "Get All Berita", res);
+  } catch (error) {
+    Response(500, error.message, res);
+  }
+};
+export const getTopBerita = async (req, res) => {
+  const id = req.params.id;
+  console.log(id);
+  try {
+    const response = await Berita.findAll({
+      attributes: ["uuid", "judul", "file", "createdAt"],
+      where: {
+        uuid: { [Op.ne]: id },
+      },
+      include: [
+        {
+          model: User,
+          attributes: ["name", "email", "role"],
+        },
+      ],
+      limit: 4,
+      order: [["createdAt", "DESC"]],
     });
     const beritaData = response.map((berita) => {
       let parsedFile = berita.toJSON(); // Konversi instance Sequelize ke objek JS

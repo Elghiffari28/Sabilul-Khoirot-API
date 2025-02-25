@@ -96,6 +96,7 @@ export const deleteKomentar = async (req, res) => {
     });
     Response(200, "Komentar berhasil dihapus", res);
   } catch (error) {
+    throw new Error();
     Response(500, error.message, res);
   }
 };
