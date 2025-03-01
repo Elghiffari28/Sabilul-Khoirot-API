@@ -25,25 +25,30 @@ const port = process.env.PORT;
 const sessionStore = SequelizeStore(session.Store);
 const store = new sessionStore({
   db: db,
+  checkExpirationInterval: 15 * 60 * 1000,
+  // Set waktu expired sesi (misalnya 1 jam)
+  expiration: 2 * 60 * 60 * 1000,
 });
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
+  cors({
+    origin: "http://localhost:3000", // URL frontend
+    credentials: true, // Jika menggunakan cookie/session
+  })
+);
+app.use(
   session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     store: store,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: {
       secure: "auto",
+      maxAge: 2 * 3600000,
     },
-  })
-);
-app.use(
-  cors({
-    origin: "http://localhost:3000", // URL frontend
-    credentials: true, // Jika menggunakan cookie/session
+    rolling: true,
   })
 );
 app.use("/image", express.static("public/images/"));
