@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.get("/guru", getGuru);
 router.get("/guru/:id", getGuruById);
-router.post("/guru", upload.none(), createGuru);
+router.post("/guru", upload.none(), createGuru, adminOnly, verifyUser);
 router.patch("/guru/:id", upload.single("foto"), verifyUser, updateGuru);
 router.delete("/guru/:id", deleteGuru, verifyUser, adminOnly);
 

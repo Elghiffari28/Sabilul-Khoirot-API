@@ -107,8 +107,8 @@ const Guru = db.define(
   }
 );
 
-Guru.belongsTo(User, { foreignKey: "userId", as: "user" });
-User.hasOne(Guru, { foreignKey: "userId", as: "guru" });
+Guru.belongsTo(User, { foreignKey: "userId", as: "user", onDelete: "CASCADE" });
+User.hasOne(Guru, { foreignKey: "userId", as: "guru", onDelete: "CASCADE" });
 
 // Guru.addHook("beforeDestroy", async (guru, options) => {
 //   const user = await guru.getUser(); // Ambil User terkait

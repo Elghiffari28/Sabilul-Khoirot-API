@@ -45,7 +45,7 @@ export const createGuru = async (req, res) => {
   } = req.body;
   console.log({
     name,
-    nig,
+    nrg,
     tempat_lahir,
     tanggal_lahir,
     alamat,

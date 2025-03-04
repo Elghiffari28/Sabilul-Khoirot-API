@@ -37,9 +37,11 @@ export const getTopBerita = async (req, res) => {
   try {
     const response = await Berita.findAll({
       attributes: ["uuid", "judul", "file", "createdAt"],
-      where: {
-        uuid: { [Op.ne]: id },
-      },
+      where: id
+        ? {
+            uuid: { [Op.ne]: id },
+          }
+        : {},
       include: [
         {
           model: User,
