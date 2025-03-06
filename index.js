@@ -36,6 +36,8 @@ app.use(
   cors({
     origin: "http://localhost:3000", // URL frontend
     credentials: true, // Jika menggunakan cookie/session
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    optionsSuccessStatus: 204, // Tambahkan ini
   })
 );
 app.use(

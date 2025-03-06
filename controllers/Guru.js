@@ -98,6 +98,7 @@ export const updateGuru = async (req, res) => {
     },
   });
   if (!guru) return Response(404, "Guru tidak ditemukan", res);
+
   const {
     name,
     nrg,
@@ -119,8 +120,22 @@ export const updateGuru = async (req, res) => {
     DeleteImage(guru.foto);
     file = req.file.filename;
   }
-  console.log(file);
-  console.log(nik.length);
+  const updateData = {};
+  if (name) updateData.name = name;
+  if (nrg) updateData.nrg = nrg;
+  if (nik) updateData.nik = nik;
+  if (no_sk_awal) updateData.no_sk_awal = no_sk_awal;
+  if (tempat_lahir) updateData.tempat_lahir = tempat_lahir;
+  if (tanggal_lahir) updateData.tanggal_lahir = tanggal_lahir;
+  if (alamat) updateData.alamat = alamat;
+  if (jabatan) updateData.jabatan = jabatan;
+  if (gender) updateData.gender = gender;
+  if (agama) updateData.agama = agama;
+  if (nohp) updateData.nohp = nohp;
+  if (tahun_masuk) updateData.tahun_masuk = tahun_masuk;
+  if (file) updateData.foto = file;
+  // console.log(file);
+  // console.log(nik.length);
   // console.log("Data to Update:", {
   //   name,
   //   nrg,
@@ -135,37 +150,19 @@ export const updateGuru = async (req, res) => {
   //   nohp,
   //   tahun_masuk,
   // });
-  const user = await User.findOne({
-    where: {
-      name: name,
-    },
-  });
+  // const user = await User.findOne({
+  //   where: {
+  //     name: name,
+  //   },
+  // });
   // console.log(user.id);
   try {
-    await Guru.update(
-      {
-        name: name,
-        nrg,
-        nik,
-        no_sk_awal,
-        tempat_lahir: tempat_lahir,
-        tanggal_lahir: tanggal_lahir,
-        alamat: alamat,
-        jabatan: jabatan,
-        gender: gender,
-        agama: agama,
-        nohp: nohp,
-        tahun_masuk: tahun_masuk,
-        userId: user.id,
-        foto: file,
+    const data = await Guru.update(updateData, {
+      where: {
+        id: guru.id,
       },
-      {
-        where: {
-          id: guru.id,
-        },
-      }
-    );
-    Response(201, "Data guru berhasil diupdate", res);
+    });
+    GETResponse(201, updateData, "Data guru berhasil diupdate", res);
   } catch (error) {
     Response(500, error.message, res);
   }
