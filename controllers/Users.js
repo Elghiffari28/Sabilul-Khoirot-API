@@ -50,20 +50,28 @@ export const updateUser = async (req, res) => {
   const userId = req.userId;
   let user;
   if (id) {
-    await User.findOne({
+    const data = await User.findOne({
       where: {
         uuid: id,
       },
     });
+    user = data;
   } else {
-    await User.findOne({
+    const data = await User.findOne({
       where: {
         id: userId,
       },
     });
+    user = data;
   }
   if (!user) return Response(404, "User tidak ditemukan", res);
   const { name, email, password, confirmPassword, role } = req.body;
+  const updateData = {};
+  if (name) updateData.name = name;
+  if (email) updateData.email = email;
+  if (password) updateData.password = password;
+  if (confirmPassword) updateData.confirmPassword = confirmPassword;
+  if (role) updateData.role = role;
   console.log({ name, email, password, confirmPassword, role });
   let hashPassword;
   if (password === "" || password === null) {
@@ -88,7 +96,7 @@ export const updateUser = async (req, res) => {
         },
       }
     );
-    Response(200, "Update Data Berhasil", res);
+    GETResponse(200, updateData, "Update Data Berhasil", res);
   } catch (error) {
     Response(500, error.message, res);
   }

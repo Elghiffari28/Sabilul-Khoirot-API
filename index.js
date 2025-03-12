@@ -47,12 +47,19 @@ app.use(
     store: store,
     saveUninitialized: false,
     cookie: {
+      httpOnly: true,
       secure: "auto",
+      sameSite: "lax",
       maxAge: 2 * 3600000,
     },
     rolling: true,
   })
 );
+// app.use((req, res, next) => {
+//   console.log("Session ID:", req.sessionID);
+//   console.log("Session Data:", req.session);
+//   next();
+// });
 app.use("/image", express.static("public/images/"));
 
 app.use(AuthRoute);
@@ -67,7 +74,7 @@ app.use(SiswaRoute);
 //   .then(() => console.log("Database tersingkronisasi"))
 //   .catch((err) => console.log("Error singkronisasi database", err));
 
-// store.sync();
+store.sync();
 
 app.listen(port, () => {
   console.log(`Server berjalan di port ${port}`);

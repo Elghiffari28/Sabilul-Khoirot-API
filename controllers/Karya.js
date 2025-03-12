@@ -80,7 +80,7 @@ export const updateKarya = async (req, res) => {
         },
       }
     );
-    Response(200, "Karya berhasil diupdate", res);
+    GETResponse(200, karya, "Karya berhasil diupdate", res);
   } catch (error) {
     Response(500, error.message, res);
   }
