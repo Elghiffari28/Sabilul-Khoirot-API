@@ -17,6 +17,7 @@ import SiswaRoute from "./routes/SiswaRoute.js";
 import AuthRoute from "./routes/AuthRoute.js";
 import dotenv from "dotenv";
 import cors from "cors";
+import seedAdmin from "./config/SeedAdmin.js";
 
 dotenv.config();
 
@@ -76,6 +77,22 @@ app.use(SiswaRoute);
 
 store.sync();
 
-app.listen(port, () => {
-  console.log(`Server berjalan di port ${port}`);
-});
+const startServer = async () => {
+  try {
+    // Koneksi ke database
+    await db.authenticate();
+    console.log("✅ Database connected!");
+
+    // Jalankan seeder
+    await seedAdmin();
+
+    // Jalankan server
+    app.listen(port, () => {
+      console.log(`Server berjalan di port ${port}`);
+    });
+  } catch (error) {
+    console.error("❌ Error saat menjalankan server:", error);
+  }
+};
+
+startServer();
