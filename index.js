@@ -71,6 +71,10 @@ app.use(BeritaRoute);
 app.use(KomentarRoute);
 app.use(SiswaRoute);
 
+// db.authenticate()
+//   .then(() => console.log("Database connected!"))
+//   .catch((err) => console.log("Error:", err));
+
 // db.sync({ alter: true })
 //   .then(() => console.log("Database tersingkronisasi"))
 //   .catch((err) => console.log("Error singkronisasi database", err));
@@ -87,7 +91,7 @@ const startServer = async () => {
     await seedAdmin();
 
     // Jalankan server
-    app.listen(port, () => {
+    app.listen(port, "0.0.0.0", () => {
       console.log(`Server berjalan di port ${port}`);
     });
   } catch (error) {

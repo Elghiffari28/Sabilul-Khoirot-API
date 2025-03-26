@@ -33,7 +33,7 @@ export const getBerita = async (req, res) => {
 };
 export const getTopBerita = async (req, res) => {
   const id = req.params.id;
-  console.log(id);
+  // console.log(id);
   try {
     const response = await Berita.findAll({
       attributes: ["uuid", "judul", "file", "createdAt"],
