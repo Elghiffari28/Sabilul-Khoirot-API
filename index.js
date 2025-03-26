@@ -35,7 +35,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: "http://localhost:3000", // URL frontend
+    origin: "https://sabilulkhoirot.sch.id", // URL frontend
     credentials: true, // Jika menggunakan cookie/session
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     optionsSuccessStatus: 204, // Tambahkan ini
