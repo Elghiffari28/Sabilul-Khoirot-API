@@ -31,16 +31,18 @@ const store = new sessionStore({
   expiration: 2 * 60 * 60 * 1000,
 });
 
+const corsOptions = {
+  origin: "http://localhost:3000",
+  credentials: true,
+  methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+  optionsSuccessStatus: 204,
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(
-  cors({
-    origin: "https://sabilulkhoirot.sch.id", // URL frontend
-    credentials: true, // Jika menggunakan cookie/session
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    optionsSuccessStatus: 204, // Tambahkan ini
-  })
-);
+
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
