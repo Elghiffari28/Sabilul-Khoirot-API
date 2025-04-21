@@ -35,8 +35,8 @@ export const getKaryaById = async (req, res) => {
 export const createKarya = async (req, res) => {
   const { judul, deskripsi, author } = req.body;
   const file = req.file;
-  console.log(file);
-  console.log({ judul, deskripsi, author });
+  // console.log(file);
+  // console.log({ judul, deskripsi, author });
   try {
     await Karya.create({
       judul,

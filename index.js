@@ -52,7 +52,7 @@ app.use(
     cookie: {
       httpOnly: true,
       secure: "auto",
-      sameSite: "lax",
+      sameSite: "None",
       maxAge: 2 * 3600000,
     },
     rolling: true,
