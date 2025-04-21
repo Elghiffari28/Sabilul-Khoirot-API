@@ -18,7 +18,6 @@ const Berita = db.define(
       allowNull: false,
       validate: {
         notEmpty: true,
-        len: [3, 100],
       },
     },
     deskripsi: {
