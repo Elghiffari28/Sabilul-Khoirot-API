@@ -8,6 +8,8 @@ import Karya from "./models/Karya.js";
 import Berita from "./models/Berita.js";
 import Komentar from "./models/Komentar.js";
 import Siswa from "./models/Siswa.js";
+import Poster from "./models/Poster.js";
+import AccessLog from "./models/AccessLog.js";
 import UserRoute from "./routes/UserRoute.js";
 import GuruRoute from "./routes/GuruRoute.js";
 import KaryaRoute from "./routes/KaryaRoute.js";
@@ -15,9 +17,13 @@ import BeritaRoute from "./routes/BeritaRoute.js";
 import KomentarRoute from "./routes/KomentarRoute.js";
 import SiswaRoute from "./routes/SiswaRoute.js";
 import AuthRoute from "./routes/AuthRoute.js";
+import PosterRoute from "./routes/PosterRoute.js";
+import StatistikRoute from "./routes/StatistikRoute.js";
 import dotenv from "dotenv";
 import cors from "cors";
 import seedAdmin from "./config/SeedAdmin.js";
+import { swaggerSpec, swaggerUi } from "./config/SwaggerConfig.js";
+import accessLogger from "./middleware/AccessLogger.js";
 
 dotenv.config();
 
@@ -52,7 +58,7 @@ app.use(
     cookie: {
       httpOnly: true,
       secure: "auto",
-      sameSite: "None",
+      sameSite: "Lax",
       maxAge: 2 * 3600000,
     },
     rolling: true,
@@ -64,6 +70,8 @@ app.use(
 //   next();
 // });
 app.use("/image", express.static("public/images/"));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use(accessLogger);
 
 app.use(AuthRoute);
 app.use(UserRoute);
@@ -72,6 +80,8 @@ app.use(KaryaRoute);
 app.use(BeritaRoute);
 app.use(KomentarRoute);
 app.use(SiswaRoute);
+app.use(PosterRoute);
+app.use(StatistikRoute);
 
 // db.authenticate()
 //   .then(() => console.log("Database connected!"))
