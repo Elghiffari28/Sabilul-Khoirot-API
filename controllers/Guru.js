@@ -4,7 +4,7 @@ import User from "../models/User.js";
 import argon2 from "argon2";
 import db from "../config/Database.js";
 import { DATAResponse, GETResponse, Response } from "../response.js";
-import { DeleteImage } from "../config/UploadImage.js";
+import { DeleteImage, saveFiles } from "../config/UploadImage.js";
 
 export const getGuru = async (req, res) => {
   try {
@@ -113,49 +113,27 @@ export const updateGuru = async (req, res) => {
     nohp,
     tahun_masuk,
   } = req.body;
-  let file;
-  if (!req.file) {
-    file = guru.foto;
-  } else {
+  let fileName = guru.foto;
+  if (req.file) {
     DeleteImage(guru.foto);
-    file = req.file.filename;
+    const savedFiles = await saveFiles([req.file]);
+    fileName = savedFiles[0];
   }
-  const updateData = {};
-  if (name) updateData.name = name;
-  if (nrg) updateData.nrg = nrg;
-  if (nik) updateData.nik = nik;
-  if (no_sk_awal) updateData.no_sk_awal = no_sk_awal;
-  if (tempat_lahir) updateData.tempat_lahir = tempat_lahir;
-  if (tanggal_lahir) updateData.tanggal_lahir = tanggal_lahir;
-  if (alamat) updateData.alamat = alamat;
-  if (jabatan) updateData.jabatan = jabatan;
-  if (gender) updateData.gender = gender;
-  if (agama) updateData.agama = agama;
-  if (nohp) updateData.nohp = nohp;
-  if (tahun_masuk) updateData.tahun_masuk = tahun_masuk;
-  if (file) updateData.foto = file;
-  // console.log(file);
-  // console.log(nik.length);
-  // console.log("Data to Update:", {
-  //   name,
-  //   nrg,
-  //   nik,
-  //   no_sk_awal,
-  //   tempat_lahir,
-  //   tanggal_lahir,
-  //   alamat,
-  //   jabatan,
-  //   gender,
-  //   agama,
-  //   nohp,
-  //   tahun_masuk,
-  // });
-  // const user = await User.findOne({
-  //   where: {
-  //     name: name,
-  //   },
-  // });
-  // console.log(user.id);
+  const updateData = {
+    ...(name && { name }),
+    ...(nrg && { nrg }),
+    ...(nik && { nik }),
+    ...(no_sk_awal && { no_sk_awal }),
+    ...(tempat_lahir && { tempat_lahir }),
+    ...(tanggal_lahir && { tanggal_lahir }),
+    ...(alamat && { alamat }),
+    ...(jabatan && { jabatan }),
+    ...(gender && { gender }),
+    ...(agama && { agama }),
+    ...(nohp && { nohp }),
+    ...(tahun_masuk && { tahun_masuk }),
+    ...(fileName && { foto: fileName }),
+  };
   try {
     const data = await Guru.update(updateData, {
       where: {

@@ -1,12 +1,8 @@
-const GETResponse = (statusCode, data, message, res) => {
+const GETResponse = (statusCode, data, message, res, meta = null) => {
   res.status(statusCode).json({
     payload: data,
     message,
-    metadata: {
-      prev: "",
-      next: "",
-      current: "",
-    },
+    ...(meta && { meta: meta }),
   });
 };
 

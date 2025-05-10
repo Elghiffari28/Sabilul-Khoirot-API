@@ -29,6 +29,19 @@ export const getPoster = async (req, res) => {
     Response(500, error.message, res);
   }
 };
+
+export const getPosterById = async (req, res) => {
+  try {
+    const response = await Poster.findOne({
+      where: {
+        uuid: req.params.id,
+      },
+    });
+    GETResponse(200, response, "Get Poster ById", res);
+  } catch (error) {
+    Response(500, error.message, res);
+  }
+};
 export const getPosterByJenis = async (req, res) => {
   try {
     const { jenis } = req.params;

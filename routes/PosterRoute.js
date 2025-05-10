@@ -8,6 +8,7 @@ import {
   updatePoster,
   createPoster,
   deletePoster,
+  getPosterById,
 } from "../controllers/Poster.js";
 const router = express.Router();
 
@@ -67,6 +68,8 @@ router.get("/poster", getPoster);
  *         description: Gagal mengambil data poster
  */
 router.get("/poster/:jenis", getPosterByJenis);
+
+router.get("/poster/id/:id", getPosterById);
 
 /**
  * @swagger

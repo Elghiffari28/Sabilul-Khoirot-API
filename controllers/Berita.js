@@ -1,7 +1,7 @@
 import Berita from "../models/Berita.js";
 import { GETResponse, Response } from "../response.js";
 import User from "../models/User.js";
-import { DeleteImage } from "../config/UploadImage.js";
+import { DeleteImage, saveFiles } from "../config/UploadImage.js";
 import { Op } from "sequelize";
 
 export const getBerita = async (req, res) => {
@@ -92,13 +92,17 @@ export const getBeritaById = async (req, res) => {
 };
 export const createBerita = async (req, res) => {
   const { judul, deskripsi } = req.body;
-  const files = req.files.map((file) => file.filename);
+  // const files = req.files.map((file) => file.filename);
   if (!req.userId) return Response(401, "Harap login dahulu", res);
   try {
+    let savedFiles = [];
+    if (req.files && req.files.length > 0) {
+      savedFiles = await saveFiles(req.files); // Simpan file ke disk pakai helper
+    }
     await Berita.create({
       judul: judul,
       deskripsi: deskripsi,
-      file: JSON.stringify(files),
+      file: JSON.stringify(savedFiles),
       userId: req.userId,
     });
     Response(201, "Berita berhasil dibuat", res);

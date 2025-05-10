@@ -3,8 +3,27 @@ import { DATAResponse, GETResponse, Response } from "../response.js";
 
 export const getSiswa = async (req, res) => {
   try {
-    const response = await Siswa.findAll();
-    GETResponse(200, response, "Get All Siswa", res);
+    const {
+      page = 1,
+      limit = 10,
+      sort = "createdAt",
+      order = "DESC",
+    } = req.query;
+
+    const offset = (page - 1) * limit;
+    const siswas = await Siswa.findAndCountAll({
+      limit: parseInt(limit),
+      offset: parseInt(offset),
+      order: [[sort, order]],
+    });
+
+    const meta = {
+      totalData: siswas.count,
+      totalPages: Math.ceil(siswas.count / limit),
+      currentPage: parseInt(page),
+      perPage: parseInt(limit),
+    };
+    GETResponse(200, siswas.rows, "Get All Siswa", res, meta);
   } catch (error) {
     Response(500, error.message, res);
   }
